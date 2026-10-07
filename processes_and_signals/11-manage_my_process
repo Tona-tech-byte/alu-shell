@@ -7,7 +7,10 @@ PROCESS="./manage_my_process"
 start_process() {
     "$PROCESS" &
     echo $! > "$PIDFILE"
-    echo "manage_my_process started"
+
+    if [ "$1" != "quiet" ]; then
+        echo "manage_my_process started"
+    fi
 }
 
 stop_process() {
@@ -22,7 +25,10 @@ stop_process() {
 
         rm -f "$PIDFILE"
     fi
-    echo "manage_my_process stopped"
+
+    if [ "$1" != "quiet" ]; then
+        echo "manage_my_process stopped"
+    fi
 }
 
 case "$1" in
@@ -33,8 +39,8 @@ case "$1" in
         stop_process
         ;;
     restart)
-        stop_process
-        start_process
+        stop_process quiet
+        start_process quiet
         echo "manage_my_process restarted"
         ;;
     *)
